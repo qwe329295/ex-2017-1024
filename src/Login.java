@@ -37,7 +37,7 @@ public class Login extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(jtfID.getText().equals("h304") &&(new String(jpfPW.getPassword()).equals("23323456")) ) {
-                    MainFrame mainFrame = new MainFrame( );
+                    MainFrame mainFrame = new MainFrame(Login.this );
                     mainFrame.setVisible(true);
                     Login.this.setVisible(false);
                 }else{
@@ -56,5 +56,10 @@ public class Login extends JFrame {
         });
 
 
+    }
+
+    public void reset() {
+        jtfID.setText("");
+        jpfPW.setText("");
     }
 }
