@@ -9,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.util.Random;
 
 public class MainFrame extends JFrame {
+//    ----------------樂透-------------------
     private JLabel jlbs[]=new JLabel[6];
     private JButton btnClose=new JButton("CLOSE");
     private JButton btnGenerate=new JButton("Generate");
@@ -16,13 +17,13 @@ public class MainFrame extends JFrame {
     private JPanel jpn1= new JPanel(new GridLayout(1,2,5,5));
     private int data[]=new int[6];
     private JMenuItem jmiSetFont =new JMenuItem("Font");
-
+//-----------------------改字體-------------
     private JPanel jpanel1 = new JPanel(new GridLayout(2,3,5,5));
     private JLabel jlbFamily =new JLabel("Family");
     private JLabel jlbStyle =new JLabel("Style");
     private JLabel jlbSize =new JLabel("Size");
     private JTextField jtfFamily =new JTextField("BOLD");
-    private JTextField jtfStyle =new JTextField("font");
+//    private JTextField jtfStyle =new JTextField("font");
     private JTextField jtfSize =new JTextField("24");
     private String[] options={"PLAIN","BOLD","ITALIC","BOLD+ITALIC"};
     private JComboBox jcbFStyle=new JComboBox(options);
@@ -42,6 +43,16 @@ public class MainFrame extends JFrame {
     private int frmW=500,frmH=400;
     private Login login;
     private Container CP;
+//    ----------------亂數鍵盤---------
+    private  JMenuItem jmrandom= new JMenuItem("亂數鍵盤");
+    private JInternalFrame jifrandom=new JInternalFrame();
+    private JTextField jtf1= new JTextField();
+    private JButton btn[]=new JButton[12];
+    private Random rnd1 =new Random();
+
+    private JPanel jpn3= new JPanel(new GridLayout(4,3,5,5));
+    private Container CP2;
+
 
     private  JInternalFrame jIFAddCategory =new JInternalFrame();
     private Container jIFAddCategoryCP;
@@ -56,9 +67,10 @@ public class MainFrame extends JFrame {
         login=log;
         init();
     }
+
     private void init() {
         this.setBounds(screenW / 2 - frmW / 2, screenH / 2 - frmH / 2, frmW, frmH);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setJMenuBar(jmb);
         this.setContentPane(jdp);
         this.addWindowListener(new WindowAdapter() {
@@ -99,9 +111,13 @@ public class MainFrame extends JFrame {
         jmb.add(jmG);
         jmb.add(jmA);
         jmF.add(jmFexit);
+
         jmG.add(jmLotto);
+        jmG.add(jmrandom);
+
         jmFexit.setAccelerator(KeyStroke.getKeyStroke('X',Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jmLotto.setAccelerator(KeyStroke.getKeyStroke('L',Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jmrandom.setAccelerator(KeyStroke.getKeyStroke('R',Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
         btnClose.addActionListener(new ActionListener() {
             @Override
@@ -109,12 +125,14 @@ public class MainFrame extends JFrame {
                 jif.dispose();
             }
         });
+
         btnGenerate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 lottoGenerate();
             }
         });
+
         jmFexit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -158,6 +176,66 @@ public class MainFrame extends JFrame {
                     UIManager.put("Menu.font",new Font(jtfFamily.getText(),fontStyle,Integer.parseInt(jtfSize.getText())));
                     UIManager.put("MenuItem.font",new Font(jtfFamily.getText(),fontStyle,Integer.parseInt(jtfSize.getText())));
                 }
+            }
+        });
+//        ----------亂數鍵盤-------------
+        
+        CP2=jifrandom.getContentPane();
+        CP2.setLayout(new BorderLayout(5,5));
+        CP2.add(jpn3,BorderLayout.CENTER);
+        CP2.add(jtf1,BorderLayout.NORTH);
+        jtf1.setEditable(false);
+
+        jmrandom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jdp.add(jifrandom);
+                jifrandom.setBounds(20,20,300,300);
+                jifrandom.setVisible(true);
+                for(int i=0;i<10;i++){
+                        btn[i].setText(String .valueOf(rnd1.nextInt(10)));
+                        boolean repeat=false;
+                        for(int j=0;j<i;j++){
+                            if(btn[j].getText().equals(btn[i].getText())){
+                                repeat=true;
+                                break;
+                            }
+                        }
+                        if(repeat ==true){
+                            i--;
+                        }
+                }
+            }
+        });
+        for(int i=0;i<10;i++){
+            btn[i]= new JButton();
+            jpn3.add(btn[i]);
+            btn[i].addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton tmpButton =(JButton) e.getSource();
+                    jtf1.setText(jtf1.getText()+tmpButton.getText());
+                }
+            });
+        }
+
+
+        btn[10]=new JButton("Close");
+        btn[11]=new JButton("CLEAR");
+        jpn3.add(btn[10]);
+        jpn3.add(btn[11]);
+        btn[10].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                        jtf1.setText(jtf1.getText()+".");
+                jifrandom.dispose();
+            }
+        });
+
+        btn[11].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jtf1.setText(" ");
             }
         });
 
